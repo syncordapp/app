@@ -1,35 +1,70 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const messageInput = document.getElementById('message-input');
-    const sendButton = document.getElementById('send-button');
-    const messageArea = document.getElementById('message-area');
+// Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyC65ZpkXJkyVJFOGZ9dDh14jmkQsRREQko",
+    authDomain: "syncordsync.firebaseapp.com",
+    databaseURL: "YOUR_DATABASE_URL",
+    projectId: "syncordsync",
+    storageBucket: "syncordsync.appspot.com",
+    messagingSenderId: "690747596328",
+    appId: "1:690747596328:web:b169c6b54c18a8e517df1d"
+};
 
-    // Example users array (replace with your own user management)
-    const users = ['Syncord', 'SyncordSync', 'Lezetho'];
+// Initialize Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
 
-    // Send message function
-    const sendMessage = () => {
-        const messageText = messageInput.value.trim();
-        if (messageText) {
-            // Append the message to the message area
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message');
-            const randomUser = users[Math.floor(Math.random() * users.length)];
-            messageElement.innerHTML = `<span class="username">${randomUser}:</span> <span class="message-content">${messageText}</span>`;
-            messageArea.appendChild(messageElement);
+// Retrieve user data from local storage
+const userData = JSON.parse(localStorage.getItem('user'));
+if (userData) {
+    document.getElementById('username').textContent = userData.username;
+    document.getElementById('profile-pic').src = userData.profilePic;
+    document.getElementById('profile-pic').style.display = 'block';
+    document.getElementById('username').style.display = 'inline';
+} else {
+    window.location.href = 'https://syncord.netlify.app/login.html'; // Change this to your login page URL
+}
 
-            // Clear the input field
-            messageInput.value = '';
+// Chat functionality
+const chatContainer = document.getElementById('chat-container');
+const messageInput = document.getElementById('message-input');
+const sendButton = document.getElementById('send-button');
 
-            // Scroll to the bottom of the message area
-            messageArea.scrollTop = messageArea.scrollHeight;
-        }
-    };
-
-    // Add event listeners
-    sendButton.addEventListener('click', sendMessage);
-    messageInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            sendMessage();
-        }
+// Load messages from Firebase
+function loadMessages() {
+    database.ref('messages').on('child_added', (snapshot) => {
+        const message = snapshot.val();
+        const messageElement = document.createElement('div');
+        messageElement.textContent = `${message.username}: ${message.text}`;
+        chatContainer.appendChild(messageElement);
     });
+}
+
+// Save messages to Firebase
+function saveMessage(username, text) {
+    const message = {
+        username: username,
+        text: text,
+        timestamp: Date.now()
+    };
+    database.ref('messages').push(message);
+}
+
+// Send message on button click
+sendButton.addEventListener('click', () => {
+    const messageText = messageInput.value;
+    if (messageText) {
+        saveMessage(userData.username, messageText); // Save message
+        messageInput.value = ''; // Clear input field
+        chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
+    }
 });
+
+// Allow sending messages with the Enter key
+messageInput.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+        sendButton.click();
+    }
+});
+
+// Load messages on page load
+loadMessages();
