@@ -6,6 +6,77 @@
     <title>Syncord</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="icon" href="https://syncordcdn.sirv.com/Images/Syncord.png" type="image/png">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #282c34;
+            color: white;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        #chat-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            overflow-y: auto;
+            height: 300px;
+            margin-bottom: 10px;
+        }
+
+        #message-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #send-button {
+            padding: 10px;
+            background-color: #282c34;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-left: 5px;
+            border-radius: 4px;
+        }
+
+        #send-button:hover {
+            background-color: #3e434a;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -19,8 +90,48 @@
     <main>
         <h1>Welcome to Syncord!</h1>
         <p>Your communication platform for seamless connections.</p>
+
+        <div id="chat-container"></div>
+
+        <div>
+            <input type="text" id="message-input" placeholder="Type your message..." />
+            <button id="send-button">Send</button>
+        </div>
     </main>
 
     <script src="../script.js"></script>
+    <script>
+        // Retrieve user data from local storage
+        const userData = JSON.parse(localStorage.getItem('user'));
+        if (userData) {
+            document.getElementById('username').textContent = userData.username;
+            document.getElementById('profile-pic').src = userData.profilePic;
+            document.getElementById('profile-pic').style.display = 'block';
+            document.getElementById('username').style.display = 'inline';
+        }
+
+        // Chat functionality
+        const chatContainer = document.getElementById('chat-container');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+
+        sendButton.addEventListener('click', () => {
+            const messageText = messageInput.value;
+            if (messageText) {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = `${userData.username}: ${messageText}`;
+                chatContainer.appendChild(messageElement);
+                messageInput.value = '';
+                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
+            }
+        });
+
+        // Allow sending messages with the Enter key
+        messageInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+    </script>
 </body>
 </html>
