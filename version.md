@@ -1,3 +1,6 @@
+Version 1.0.5:
+Added a better background (gradient!) and a blurred topbar.
+
 Version 1.0.4:
 Added a gFirebase DB so we can actually see others' messages...?
 
