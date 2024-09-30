@@ -77,6 +77,20 @@
         #send-button:hover {
             background-color: #3e434a;
         }
+
+        #toggle-slow-mode {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #282c34;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        #toggle-slow-mode:hover {
+            background-color: #3e434a;
+        }
     </style>
 </head>
 <body>
@@ -98,6 +112,8 @@
             <input type="text" id="message-input" placeholder="Type your message..." />
             <button id="send-button">Send</button>
         </div>
+
+        <button id="toggle-slow-mode">Toggle Slow Mode</button>
     </main>
 
     <script src="../script.js"></script>
@@ -115,6 +131,10 @@
         const chatContainer = document.getElementById('chat-container');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
+
+        let isSlowMode = false; // Control slow mode
+        const slowModeInterval = 5000; // 5 seconds
+        const adminUsername = "Syncord"; // Change this to your username
 
         // Load messages from local storage
         const loadMessages = () => {
@@ -139,6 +159,12 @@
         sendButton.addEventListener('click', () => {
             const messageText = messageInput.value;
             if (messageText) {
+                // Check if slow mode is active and if the sender is not the admin
+                if (isSlowMode && userData.username !== adminUsername) {
+                    alert("Slow mode is ON. Only the admin can send messages.");
+                    return; // Prevent non-admin users from sending messages
+                }
+
                 saveMessage(userData.username, messageText); // Save message
                 const messageElement = document.createElement('div');
                 messageElement.textContent = `${userData.username}: ${messageText}`;
@@ -154,6 +180,22 @@
                 sendButton.click();
             }
         });
+
+        // Function to toggle slow mode
+        const toggleSlowMode = () => {
+            isSlowMode = !isSlowMode;
+            if (isSlowMode) {
+                alert("Slow mode is now ON! Only the admin can send messages.");
+                setTimeout(() => {
+                    isSlowMode = false; // Automatically turn off slow mode after the interval
+                    alert("Slow mode is now OFF!");
+                }, slowModeInterval);
+            } else {
+                alert("Slow mode is now OFF!");
+            }
+        };
+
+        document.getElementById('toggle-slow-mode').addEventListener('click', toggleSlowMode);
     </script>
 </body>
 </html>
