@@ -17,6 +17,17 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background: linear-gradient(135deg, #6b6e94, #ffd9d9); /* Modern gradient background */
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgba(40, 44, 52, 0.7); /* Semi-transparent background */
+    color: white;
+    backdrop-filter: blur(10px); /* Blur effect */
 }
 
 .user-info {
@@ -31,135 +42,129 @@ body {
     margin-right: 10px;
 }
 
-
-header {
-  background-color: #3498db;
-  padding: 10px;
-}
-
 nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .logo {
-  font-size: 1.8rem;
-  color: white;
-  font-weight: bold;
+    font-size: 1.8rem;
+    color: white;
+    font-weight: bold;
 }
 
 .nav-links {
-  list-style: none;
+    list-style: none;
 }
 
 .nav-links li {
-  display: inline;
-  margin-left: 20px;
+    display: inline;
+    margin-left: 20px;
 }
 
 .nav-links a {
-  color: white;
-  text-decoration: none;
-  font-size: 1.1rem;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
 }
 
 #hero {
-  background-color: #2980b9;
-  color: white;
-  padding: 60px 0;
-  text-align: center;
+    background-color: #2980b9;
+    color: white;
+    padding: 60px 0;
+    text-align: center;
 }
 
 #hero h1 {
-  font-size: 3.5rem;
-  margin-bottom: 20px;
+    font-size: 3.5rem;
+    margin-bottom: 20px;
 }
 
 #hero button {
-  padding: 10px 20px;
-  background-color: white;
-  color: #2980b9;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
+    padding: 10px 20px;
+    background-color: white;
+    color: #2980b9;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
 }
 
 #features {
-  padding: 40px 20px;
-  text-align: center;
+    padding: 40px 20px;
+    text-align: center;
 }
 
 #features h2 {
-  margin-bottom: 40px;
-  font-size: 2.5rem;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
 }
 
 .feature-grid {
-  display: flex;
-  justify-content: center;
-  gap: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
 }
 
 .feature-box {
-  background-color: white;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 250px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 250px;
 }
 
 #download {
-  background-color: #e74c3c;
-  color: white;
-  text-align: center;
-  padding: 50px 20px;
+    background-color: #e74c3c;
+    color: white;
+    text-align: center;
+    padding: 50px 20px;
 }
 
 #download button {
-  padding: 10px 20px;
-  background-color: white;
-  color: #e74c3c;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
+    padding: 10px 20px;
+    background-color: white;
+    color: #e74c3c;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
 }
 
 #contact {
-  padding: 50px 20px;
-  text-align: center;
+    padding: 50px 20px;
+    text-align: center;
 }
 
 #contact h2 {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 #contact-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #contact-form input, 
 #contact-form textarea {
-  width: 300px;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
 }
 
 #contact-form button {
-  padding: 10px 20px;
-  background-color: #2980b9;
-  color: white;
-  border: none;
-  cursor: pointer;
+    padding: 10px 20px;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
 footer {
-  background-color: #2c3e50;
-  color: white;
-  padding: 10px 0;
-  text-align: center;
+    background-color: #2c3e50;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
 }
