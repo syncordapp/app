@@ -47,45 +47,52 @@
     const db = firebase.firestore();
         
         const chatContainer = document.getElementById('message-display');
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
 
-        // This array will hold all messages for this example
-        let messages = [];
-
-        // Function to display messages
-        const displayMessages = () => {
-            chatContainer.innerHTML = ''; // Clear previous messages
-            messages.forEach(message => {
-                const messageElement = document.createElement('div');
-                messageElement.textContent = `${message.username}: ${message.text}`;
-                chatContainer.appendChild(messageElement);
+    // Load messages from Firestore
+    const loadMessages = () => {
+        db.collection("messages").orderBy("timestamp")
+            .onSnapshot((snapshot) => {
+                chatContainer.innerHTML = ""; // Clear existing messages
+                snapshot.forEach((doc) => {
+                    const messageData = doc.data();
+                    const messageElement = document.createElement('div');
+                    messageElement.textContent = `${messageData.username}: ${messageData.text}`;
+                    chatContainer.appendChild(messageElement);
+                });
+                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
             });
-            chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
-        };
+    };
 
-        // Add a new message to the message array and display it
-        const addMessage = (username, text) => {
-            messages.push({ username, text });
-            displayMessages();
-        };
-
-        sendButton.addEventListener('click', () => {
-            const messageText = messageInput.value;
-            if (messageText) {
-                const userData = JSON.parse(localStorage.getItem('user'));
-                const username = userData ? userData.username : 'Anonymous';
-                addMessage(username, messageText); // Add message
-                messageInput.value = '';
-            }
+    // Save messages to Firestore
+    const saveMessage = (username, text) => {
+        db.collection("messages").add({
+            username: username,
+            text: text,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
+    };
 
-        // Allow sending messages with the Enter key
-        messageInput.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-                sendButton.click();
-            }
-        });
+    // Load messages on page load
+    loadMessages();
+
+    sendButton.addEventListener('click', () => {
+        const messageText = messageInput.value;
+        if (messageText) {
+            const userData = JSON.parse(localStorage.getItem('user'));
+            const username = userData ? userData.username : 'Anonymous';
+            saveMessage(username, messageText); // Save message
+            messageInput.value = '';
+        }
+    });
+
+    // Allow sending messages with the Enter key
+    messageInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            sendButton.click();
+        }
+    });
     </script>
 </body>
 </html>
