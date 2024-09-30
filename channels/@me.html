@@ -12,6 +12,7 @@
             flex-direction: column;
             height: 100vh;
             margin: 0;
+            font-family: 'Inter', sans-serif; /* Add the Inter font */
         }
 
         header {
@@ -115,9 +116,30 @@
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
 
+        // Load messages from local storage
+        const loadMessages = () => {
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            messages.forEach(message => {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = `${message.username}: ${message.text}`;
+                chatContainer.appendChild(messageElement);
+            });
+            chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
+        };
+
+        // Save messages to local storage
+        const saveMessage = (username, text) => {
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            messages.push({ username, text });
+            localStorage.setItem('messages', JSON.stringify(messages));
+        };
+
+        loadMessages(); // Load messages on page load
+
         sendButton.addEventListener('click', () => {
             const messageText = messageInput.value;
             if (messageText) {
+                saveMessage(userData.username, messageText); // Save message
                 const messageElement = document.createElement('div');
                 messageElement.textContent = `${userData.username}: ${messageText}`;
                 chatContainer.appendChild(messageElement);
