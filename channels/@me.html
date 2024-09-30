@@ -6,91 +6,10 @@
     <title>Syncord</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="icon" href="https://syncordcdn.sirv.com/Images/Syncord.png" type="image/png">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            margin: 0;
-            font-family: 'Inter', sans-serif; /* Add the Inter font */
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            background-color: #282c34;
-            color: white;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .user-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f0;
-        }
-
-        #chat-container {
-            width: 100%;
-            max-width: 600px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            overflow-y: auto;
-            height: 300px;
-            margin-bottom: 10px;
-        }
-
-        #message-input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        #send-button {
-            padding: 10px;
-            background-color: #282c34;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-left: 5px;
-            border-radius: 4px;
-        }
-
-        #send-button:hover {
-            background-color: #3e434a;
-        }
-
-        #toggle-slow-mode {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #282c34;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        #toggle-slow-mode:hover {
-            background-color: #3e434a;
-        }
+        /* Your existing CSS */
     </style>
 </head>
 <body>
@@ -112,12 +31,24 @@
             <input type="text" id="message-input" placeholder="Type your message..." />
             <button id="send-button">Send</button>
         </div>
-
-        <button id="toggle-slow-mode">Toggle Slow Mode</button>
     </main>
 
     <script src="../script.js"></script>
     <script>
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC65ZpkXJkyVJFOGZ9dDh14jmkQsRREQko",
+            authDomain: "syncordsync.firebaseapp.com",
+            projectId: "syncordsync",
+            storageBucket: "syncordsync.appspot.com",
+            messagingSenderId: "690747596328",
+            appId: "1:690747596328:web:b169c6b54c18a8e517df1d"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         // Retrieve user data from local storage
         const userData = JSON.parse(localStorage.getItem('user'));
         if (userData) {
@@ -127,50 +58,35 @@
             document.getElementById('username').style.display = 'inline';
         }
 
-        // Chat functionality
         const chatContainer = document.getElementById('chat-container');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
 
-        let isSlowMode = false; // Control slow mode
-        const slowModeInterval = 5000; // 5 seconds
-        const adminUsername = "Syncord"; // Change this to your username
-
-        // Load messages from local storage
+        // Load messages from Firestore
         const loadMessages = () => {
-            const messages = JSON.parse(localStorage.getItem('messages')) || [];
-            messages.forEach(message => {
-                const messageElement = document.createElement('div');
-                messageElement.textContent = `${message.username}: ${message.text}`;
-                chatContainer.appendChild(messageElement);
-            });
-            chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
+            db.collection("messages").orderBy("timestamp")
+                .onSnapshot(snapshot => {
+                    chatContainer.innerHTML = ''; // Clear chat container
+                    snapshot.forEach(doc => {
+                        const message = doc.data();
+                        const messageElement = document.createElement('div');
+                        messageElement.textContent = `${message.username}: ${message.text}`;
+                        chatContainer.appendChild(messageElement);
+                    });
+                    chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
+                });
         };
 
-        // Save messages to local storage
-        const saveMessage = (username, text) => {
-            const messages = JSON.parse(localStorage.getItem('messages')) || [];
-            messages.push({ username, text });
-            localStorage.setItem('messages', JSON.stringify(messages));
-        };
-
-        loadMessages(); // Load messages on page load
-
+        // Send message to Firestore
         sendButton.addEventListener('click', () => {
             const messageText = messageInput.value;
             if (messageText) {
-                // Check if slow mode is active and if the sender is not the admin
-                if (isSlowMode && userData.username !== adminUsername) {
-                    alert("Slow mode is ON. Only the admin can send messages.");
-                    return; // Prevent non-admin users from sending messages
-                }
-
-                saveMessage(userData.username, messageText); // Save message
-                const messageElement = document.createElement('div');
-                messageElement.textContent = `${userData.username}: ${messageText}`;
-                chatContainer.appendChild(messageElement);
+                db.collection("messages").add({
+                    username: userData.username,
+                    text: messageText,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
                 messageInput.value = '';
-                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
             }
         });
 
@@ -181,21 +97,7 @@
             }
         });
 
-        // Function to toggle slow mode
-        const toggleSlowMode = () => {
-            isSlowMode = !isSlowMode;
-            if (isSlowMode) {
-                alert("Slow mode is now ON! Only the admin can send messages.");
-                setTimeout(() => {
-                    isSlowMode = false; // Automatically turn off slow mode after the interval
-                    alert("Slow mode is now OFF!");
-                }, slowModeInterval);
-            } else {
-                alert("Slow mode is now OFF!");
-            }
-        };
-
-        document.getElementById('toggle-slow-mode').addEventListener('click', toggleSlowMode);
+        loadMessages(); // Load messages on page load
     </script>
 </body>
 </html>
