@@ -6,11 +6,6 @@
     <title>Syncord</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="icon" href="https://syncordcdn.sirv.com/Images/Syncord.png" type="image/png">
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-    <style>
-        /* Your existing CSS */
-    </style>
 </head>
 <body>
     <header>
@@ -22,83 +17,64 @@
     </header>
 
     <main>
-    <h1>Welcome to Syncord!</h1>
-    <p>Your communication platform for seamless connections.</p>
+        <h1>Your Channels</h1>
 
-    <!-- Frame for chat container -->
-    <div class="chat-frame">
-        <div id="chat-container"></div>
-    </div>
-
-    <div>
-        <input type="text" id="message-input" placeholder="Type your message..." />
-        <button id="send-button">Send</button>
-    </div>
-</main>
-
+        <div id="chat-container">
+            <div id="message-display" style="overflow-y: auto; height: 300px;"></div>
+            <div>
+                <input type="text" id="message-input" placeholder="Type your message..." />
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+    </main>
 
     <script src="../script.js"></script>
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyC65ZpkXJkyVJFOGZ9dDh14jmkQsRREQko",
-            authDomain: "syncordsync.firebaseapp.com",
-            projectId: "syncordsync",
-            storageBucket: "syncordsync.appspot.com",
-            messagingSenderId: "690747596328",
-            appId: "1:690747596328:web:b169c6b54c18a8e517df1d"
-        };
-
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        console.log("Firebase initialized successfully.");
-
-        const userData = JSON.parse(localStorage.getItem('user'));
-        if (userData) {
-            document.getElementById('username').textContent = userData.username;
-            document.getElementById('profile-pic').src = userData.profilePic;
-            document.getElementById('profile-pic').style.display = 'block';
-            document.getElementById('username').style.display = 'inline';
-        }
-
-        const chatContainer = document.getElementById('chat-container');
+        const chatContainer = document.getElementById('message-display');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
 
+        // Load messages from local storage
         const loadMessages = () => {
-            db.collection("messages").orderBy("timestamp")
-                .onSnapshot(snapshot => {
-                    chatContainer.innerHTML = ''; // Clear chat container
-                    snapshot.forEach(doc => {
-                        const message = doc.data();
-                        const messageElement = document.createElement('div');
-                        messageElement.textContent = `${message.username}: ${message.text}`;
-                        chatContainer.appendChild(messageElement);
-                    });
-                    chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
-                });
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            messages.forEach(message => {
+                const messageElement = document.createElement('div');
+                messageElement.textContent = `${message.username}: ${message.text}`;
+                chatContainer.appendChild(messageElement);
+            });
+            chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
         };
+
+        // Save messages to local storage
+        const saveMessage = (username, text) => {
+            const messages = JSON.parse(localStorage.getItem('messages')) || [];
+            messages.push({ username, text });
+            localStorage.setItem('messages', JSON.stringify(messages));
+        };
+
+        // Load messages on page load
+        loadMessages();
 
         sendButton.addEventListener('click', () => {
             const messageText = messageInput.value;
             if (messageText) {
-                console.log("Sending message:", messageText);
-                db.collection("messages").add({
-                    username: userData.username,
-                    text: messageText,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                })
-                .then(() => {
-                    console.log("Message sent successfully!");
-                    messageInput.value = '';
-                })
-                .catch((error) => {
-                    console.error("Error sending message:", error);
-                });
+                const userData = JSON.parse(localStorage.getItem('user'));
+                const username = userData ? userData.username : 'Anonymous';
+                saveMessage(username, messageText); // Save message
+                const messageElement = document.createElement('div');
+                messageElement.textContent = `${username}: ${messageText}`;
+                chatContainer.appendChild(messageElement);
+                messageInput.value = '';
+                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the bottom
             }
         });
 
-        loadMessages(); // Load messages on page load
+        // Allow sending messages with the Enter key
+        messageInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendButton.click();
+            }
+        });
     </script>
 </body>
 </html>
