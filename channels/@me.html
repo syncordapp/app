@@ -6,6 +6,8 @@
     <title>Syncord</title>
     <link rel="stylesheet" href="../style.css">
     <link rel="icon" href="https://syncordcdn.sirv.com/Images/Syncord.png" type="image/png">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
     <header>
@@ -30,6 +32,20 @@
 
     <script src="../script.js"></script>
     <script>
+        // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyC65ZpkXJkyVJFOGZ9dDh14jmkQsRREQko",
+        authDomain: "syncordsync.firebaseapp.com",
+        projectId: "syncordsync",
+        storageBucket: "syncordsync.appspot.com",
+        messagingSenderId: "690747596328",
+        appId: "1:690747596328:web:b169c6b54c18a8e517df1d"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+        
         const chatContainer = document.getElementById('message-display');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
