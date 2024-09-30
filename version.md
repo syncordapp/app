@@ -1,3 +1,6 @@
+Version 1.0.3:
+Added slowmode (only I can touch this) and functionality of being able to see everyones messages(?)
+
 Version 1.0.2:
 Added perma-chat (chats stay forever/until I reset it)
 
