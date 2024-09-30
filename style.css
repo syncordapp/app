@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+img {
+  pointer-events: none; /* Prevents any mouse events */
+}
+
 body {
   font-family: Arial, sans-serif;
   line-height: 1.6;
