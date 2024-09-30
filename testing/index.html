@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord UI Replica</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="server-icon">
+                <img src="https://syncordcdn.sirv.com/Images/Syncord.png" alt="Server Logo">
+            </div>
+            <div class="channels">
+                <h2>Channels</h2>
+                <ul>
+                    <li># general</li>
+                    <li># random</li>
+                    <li># announcements</li>
+                </ul>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h1>General</h1>
+            </header>
+
+            <div class="message-area" id="message-area">
+                <!-- Messages will be appended here -->
+            </div>
+
+            <footer class="message-input">
+                <input type="text" id="message-input" placeholder="Type your message..." />
+                <button id="send-button">Send</button>
+            </footer>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
