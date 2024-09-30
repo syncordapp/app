@@ -14,5 +14,5 @@ if (user) {
     document.getElementById('username').style.display = 'block'; // Show the username
 } else {
     // If not logged in, redirect to login page
-    window.location.href = 'login.html'; // Change this to your login page URL
+    window.location.href = 'syncord.netlify.app/login.html'; // Change this to your login page URL
 }
