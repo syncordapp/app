@@ -12,7 +12,8 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #000000;
+    background: rgb(174,177,238);
+    background: radial-gradient(circle, rgba(174,177,238,1) 0%, rgba(148,187,233,1) 100%);
 }
 
 .chat-frame {
