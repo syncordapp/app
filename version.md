@@ -1,3 +1,6 @@
+Version 1.0.4:
+Added a gFirebase DB so we can actually see others' messages...?
+
 Version 1.0.3:
 Added slowmode (only I can touch this) and functionality of being able to see everyones messages(?)
 
