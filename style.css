@@ -44,12 +44,7 @@ body {
     flex-direction: column;
     height: 100vh;
     background: linear-gradient(135deg, #6b6e94, #ffd9d9); /* Modern gradient background */
-    color: white;
-}
-
-chat {
-    font-family: 'Inter', sans-serif;
-    color: white;
+    color: black;
 }
 
 header {
@@ -208,7 +203,7 @@ footer {
     max-width: 600px; /* Set a max-width for the chat */
     margin: 0 auto; /* Center the chat container */
     background-color: white;
-    border: 1px solid #ccc;
+    border: 5px solid #ccc;
     border-radius: 8px;
     padding: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -218,5 +213,6 @@ footer {
     overflow-y: auto; /* Enable vertical scroll */
     max-height: 300px; /* Set max height for the chat display */
     margin-bottom: 10px; /* Space between message display and input */
+    color: black;
 }
 
