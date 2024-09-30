@@ -46,6 +46,11 @@ body {
     color: white;
 }
 
+chat {
+    font-family: 'Inter', sans-serif;
+    color: white;
+}
+
 header {
     display: flex;
     justify-content: space-between;
