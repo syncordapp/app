@@ -202,7 +202,7 @@ footer {
     width: 100%;
     max-width: 600px; /* Set a max-width for the chat */
     margin: 0 auto; /* Center the chat container */
-    background-color: white;
+    background-color: black;
     border: 5px solid #ccc;
     border-radius: 8px;
     padding: 10px;
