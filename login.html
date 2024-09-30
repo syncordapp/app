@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Syncord</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 300px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #282c34;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3e434a;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login to Syncord</h1>
+    <form id="login-form">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="url" id="profile-pic" placeholder="Profile Picture URL" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const profilePic = document.getElementById('profile-pic').value;
+
+            // Store user data in local storage
+            localStorage.setItem('user', JSON.stringify({ username, profilePic }));
+            window.location.href = 'home.html'; // Redirect to the home page
+        });
+    </script>
+</body>
+</html>
