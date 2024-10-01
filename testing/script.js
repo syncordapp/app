@@ -6,7 +6,7 @@ import { getDatabase, ref, onChildAdded, push } from "https://www.gstatic.com/fi
 const firebaseConfig = {
     apiKey: "AIzaSyC65ZpkXJkyVJFOGZ9dDh14jmkQsRREQko",
     authDomain: "syncordsync.firebaseapp.com",
-    databaseURL: "YOUR_DATABASE_URL",
+    databaseURL: "https://syncordsync-default-rtdb.firebaseio.com/",
     projectId: "syncordsync",
     storageBucket: "syncordsync.appspot.com",
     messagingSenderId: "690747596328",
