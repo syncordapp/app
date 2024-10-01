@@ -1,4 +1,8 @@
-// Initialize Firebase
+// Import Firebase functions
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
+import { getDatabase, ref, onChildAdded, push } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyC65ZpkXJkyVJFOGZ9dDh14jmkQsRREQko",
     authDomain: "syncordsync.firebaseapp.com",
@@ -11,7 +15,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const database = database();
+const database = getDatabase(app);
 
 // Retrieve user data from local storage
 const userData = JSON.parse(localStorage.getItem('user'));
@@ -25,13 +29,14 @@ if (userData) {
 }
 
 // Chat functionality
-const chatContainer = document.getElementById('chat-container');
+const chatContainer = document.getElementById('message-area');
 const messageInput = document.getElementById('message-input');
 const sendButton = document.getElementById('send-button');
 
 // Load messages from Firebase
 function loadMessages() {
-    database.ref('messages').on('child_added', (snapshot) => {
+    const messagesRef = ref(database, 'messages');
+    onChildAdded(messagesRef, (snapshot) => {
         const message = snapshot.val();
         const messageElement = document.createElement('div');
         messageElement.textContent = `${message.username}: ${message.text}`;
@@ -46,7 +51,8 @@ function saveMessage(username, text) {
         text: text,
         timestamp: Date.now()
     };
-    database.ref('messages').push(message);
+    const messagesRef = ref(database, 'messages');
+    push(messagesRef, message);
 }
 
 // Send message on button click
