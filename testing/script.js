@@ -10,8 +10,8 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+const app = initializeApp(firebaseConfig);
+const database = database();
 
 // Retrieve user data from local storage
 const userData = JSON.parse(localStorage.getItem('user'));
